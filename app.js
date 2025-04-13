@@ -22,6 +22,19 @@ app.post('/usuarios', (req, res) => {
   });
 });
 
+// Eliminar un usuario por ID
+app.delete('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM usuarios WHERE id = ?', [id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ message: 'Usuario eliminado correctamente' });
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`API ejecutándose en http://localhost:${PORT}`);
 });
